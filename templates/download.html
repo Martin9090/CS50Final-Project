@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Download
+{% endblock %}
+
+{% block main %}
+<form action="/download" method="post">
+    <div class="mb-3">
+        <h4>Download Patient Data History</h4>
+    </div>
+    <div class="mb-3">
+        <div class="mb-3">
+            <p>
+            <h6>Select a patient to download the data</h6>
+            </p>
+            <select class="form-select mx-auto w-auto" name="patient">
+
+                <option disabled selected>Patient</option>
+                {% for patient in patients %}
+
+                <option value="{{patient.name}}">{{ patient.name }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Create File</button>
+    </div>
+</form>
+{% endblock %}

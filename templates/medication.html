@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Medication
+{% endblock %}
+
+{% block main %}
+<h4>Add new given Medication</h4>
+<form action="/medication" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" name="patient">
+            <option disabled selected>Patient</option>
+            {% for patient in patients %}
+
+            <option value="{{patient.name}}">{{ patient.name }}</option>
+
+            {% endfor %}
+
+        </select>
+    </div>
+    <div class="mb-3">
+        <input type="text" list="medication_list" name="medication" placeholder="Select/Enter Medication" />
+
+        <datalist id="medication_list">
+            <option value=""></option>
+            <option value="Calpol"></option>
+            <option value="Calpol Infant"></option>
+            <option value="Asprin"></option>
+            <option value="Nurofen"></option>
+            <option value="Paracetamol"></option>
+            <option value="Ibuprofen"></option>
+            <option value="Infacol"></option>
+        </datalist>
+    </div>
+    <div class="mb-3">
+        <table style="margin-left: auto; margin-right: auto;">
+            <td><input autocomplete="off" class="form-control mx-auto w-auto" min="0" step="0.50" name="amount_given"
+                    placeholder="Amount given" type="number" style="display:inline"></td>
+            <td><select name="dosage" style="display:inline">
+                    <option value="ml">ml</option>
+                    <option value="mg">mg</option>
+                    <option value="tablet">tablet</option>
+                </select>
+            </td>
+        </table>
+    </div>
+    <div class="mb-3">
+        <h6>
+            <label>
+                Date and time:
+            </label>
+        </h6>
+        <input type="datetime-local" name="time_taken">
+    </div>
+    <button class="btn btn-primary" type="submit">Update</button>
+</form>
+<br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-start">Patient</th>
+            <th class="text-end">Added by</th>
+            <th class="text-end">Time given</th>
+            <th class="text-end">Medication</th>
+            <th class="text-end">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for meds in meds %}
+        <tr>
+            <td class="text-start">{{ meds.name }}</td>
+            <td class="text-end">{{ meds.username }}</td>
+            <td class="text-end">{{ meds.selected_time | datetime_change }}</td>
+            <td class="text-end">{{ meds.medication }}</td>
+            <td class="text-end">{{ meds.dosage }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% endblock %}

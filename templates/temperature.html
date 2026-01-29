@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Temperature
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <h4>Add new Temperature</h4>
+</div>
+<form action="/temperature" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" name="patient">
+            <option disabled selected>Patient</option>
+            {% for patient in patients %}
+
+            <option value="{{patient.name}}">{{ patient.name }}</option>
+
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" class="form-control mx-auto w-auto" min="0" step="0.01" name="temperature"
+            placeholder="Temperature" type="number">
+    </div>
+    <div class="mb-3">
+        <h6><label>Date and time:</label></h6>
+        <input type="datetime-local" name="time_taken">
+    </div>
+    <button class="btn btn-primary" type="submit">Update</button>
+</form>
+<br>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-start">Patient</th>
+            <th class="text-end">Added by</th>
+            <th class="text-end">Time taken</th>
+            <th class="text-end">Temp°C</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for temp in temps %}
+        <tr>
+            <td class="text-start">{{ temp.name }}</td>
+            <td class="text-end">{{ temp.username }}</td>
+            <td class="text-end">{{ temp.selected_time | datetime_change }}</td>
+            <td class="text-end">{{ temp.temp }}</td>
+        </tr>
+        {% endfor %}
+</table>
+
+{% endblock %}

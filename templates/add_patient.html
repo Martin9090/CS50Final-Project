@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Patient
+{% endblock %}
+
+{% block main %}
+<form action="/add_patient" method="post">
+    <div class="mb-3">
+        <h4>Add new Patient</h4>
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="patient_name"
+            placeholder="Patient name" type="text">
+    </div>
+    <div class="mb-3">
+        <input type="date" name="dob" id="dob">
+        <label for="dob"> D.O.B</label>
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" name="height" placeholder="Height (cm)" step="0.01" type="number">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-auto" name="weight" placeholder="Weight (kg)" step="0.01" type="number">
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>
+{% endblock %}

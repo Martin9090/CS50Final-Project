@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block main %}
+{% with messages = get_flashed_messages() %}
+{% endwith %}
+<div class="mb-3">
+    <h5>Patients</h5>
+</div>
+<div>
+    <a class="btn btn-primary" href="/add_patient"> Click here to add a new patient</span></a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-start">Name</th>
+            <th class="text-end">Age</th>
+            <th class="text-end">Height (cm)</th>
+            <th class="text-end">Weight (kg)</th>
+            <th class="text-middle">Dashboard</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for patient in patients %}
+        <tr>
+            <td class="text-start">{{ patient.name }}</td>
+            <td class="text-end">{{ patient.age | calculate_age }}</td>
+            <td class="text-end">{{ patient.height }}</td>
+            <td class="text-end">{{ patient.weight }}</td>
+            <td><a class="dash_button" href="/dashboard/{{ patient.id }}">Patient dashboard</span></a></td>
+        </tr>
+        {% endfor %}
+</table>
+<a class="btn btn-primary" id="delete" href="/delete">Click here to delete patient data</a>
+{% endblock %}

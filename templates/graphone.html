@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block main %}
+<div class="mb-3">
+    <h4>Temperature Data Graph for {{ name }}</h4>
+</div>
+<!--I did have some trouble getting the graph to work and had to use AI chatGPT to help
+    with the html-->
+<div class="mb-3">
+    <canvas id="myChart" style="width:100%;max-width:device-width"></canvas>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ dates | safe }},
+        datasets: [{
+            label: 'Temperature°C',
+            color: 'black',
+            data: {{ temps | safe }},
+            borderWidth: 1,
+            borderColor: '#FF0000',
+            backgroundColor: '#FF0000',
+                }]
+                },
+        options: {
+            responsive: true,
+                maintainAspectRatio: false,
+                    scales: {
+                x: {
+                    grid: {
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
+                    }
+                },
+                y: {
+                    grid: {
+                        color: 'black'
+                    },
+                    ticks: {
+                        color: 'black'
+                    },
+                    beginAtZero: false,
+                        }
+            }
+        }
+        });
+    </script>
+</div>
+{% endblock %}

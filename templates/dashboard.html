@@ -1,0 +1,266 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block main %}
+{% with messages = get_flashed_messages() %}
+{% endwith %}
+<div class="mb-3">
+    <h4> Patient Dashboard<br>{{ patient[0].name }} Age: {{ patient[0].age | calculate_age }}</h4>
+</div>
+<form action="/dashboard/csv" method="post">
+    <button class="btn btn-primary" type="submit">Download Patient Data</button>
+    <input name="patient_id" type="number" value="{{patient[0]['id']}}" style="display:none">
+    </div>
+</form>
+<br>
+<div class="grid-container">
+    <div class="grid_header"></div>
+    <div class="temp_grid">
+        <div class="dashboard_table">
+            <table class="table table-striped">
+                <tbody>
+                    <h5>Last 5 temperature's taken.</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-start">Time taken</th>
+                                <th class="text-end">Temperature(Celsius)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for temps in temperatures %}
+                            <tr>
+                                <td class="text-start">{{ temps.selected_time | datetime_change }}</td>
+                                <td class="text-end">{{ temps.temp }}</td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </tbody>
+            </table>
+            <div>
+                <form action="/dashboard/temp" method="post">
+                    <div class="accordion accordion-flush-one" id="accordionFlushOne">
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <button class="accordion-button collapsed d-block w-100 text-center" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+                                    aria-controls="flush-collapseOne">
+                                    Add new temperature.
+                                </button>
+                            </div>
+                            <div id="flush-collapseOne" class="accordion-collapse collapse"
+                                data-bs-parent="#accordionFlush">
+                                <div class="accordion-body">
+                                    <input autocomplete="off" class="form-control mx-auto w-auto" min="0" step="0.01"
+                                        name="temperature" placeholder="Temperature" type="number">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="time_taken"> Date and time:</label>
+                                    <input type="datetime-local" name="time_taken" id="time_taken">
+                                    <input name="patient_id" type="number" value="{{patient[0]['id']}}"
+                                        style="display:none">
+                                </div>
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="graph_grid">
+        <div class="dashboard_table">
+            <div class="mb-3">
+                <canvas id="myChart" style="width:100%;max-width:device-width"></canvas>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: {{ dates | safe }},
+                    datasets: [{
+                        label: 'Temperature°C',
+                        color: 'black',
+                        data: {{ temps | safe }},
+                        borderWidth: 1,
+                        borderColor: '#FF0000',
+                        backgroundColor: '#FF0000',
+                }]
+                },
+                    options: {
+                        responsive: true,
+                            maintainAspectRatio: false,
+                                scales: {
+                            x: {
+                                grid: {
+                                    color: 'black'
+                                },
+                                ticks: {
+                                    color: 'black'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: 'black'
+                                },
+                                ticks: {
+                                    color: 'black'
+                                },
+                                beginAtZero: false,
+                        }
+                        }
+                    }
+        });
+                    function resize() {
+                        myChart.resize();
+                    }
+                    resize();
+                </script>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="med_grid">
+        <div class="dashboard_table">
+            <tbody>
+                <table class="table table-striped">
+                    <div class="mb-3">
+                        <h5>Last 5 medication's given.</h5>
+                    </div>
+                    <thead>
+                        <tr>
+                            <th class="text-start">Time taken</th>
+                            <th class="text-end">Medication</th>
+                            <th class="text-end">Dosage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meds in medication %}
+                        <tr>
+                            <td class="text-start">{{ meds.selected_time | datetime_change }}</td>
+                            <td class="text-end">{{ meds.medication }}</td>
+                            <td class="text-end">{{ meds.dosage }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </tbody>
+
+            <form action="/dashboard/medication" method="post">
+                <div class="accordion accordion-flush-two" id="accordionFlushTwo">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <button class="accordion-button collapsed d-block w-100 text-center" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                                aria-controls="flush-collapseTwo">
+                                Add medication.
+                            </button>
+                        </div>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlush">
+                            <div class="accordion-body">
+                                <label for="medications">Select or enter medication given:</label>
+                                <br>
+                                <input type="text" list="medication_list" name="medication" id="medications" />
+
+                                <datalist id="medication_list">
+                                    <option value=""></option>
+                                    <option value="Calpol"></option>
+                                    <option value="Calpol Infant"></option>
+                                    <option value="Asprin"></option>
+                                    <option value="Nurofen"></option>
+                                    <option value="Paracetamol"></option>
+                                    <option value="Ibuprofen"></option>
+                                    <option value="Infacol"></option>
+                                </datalist>
+                            </div>
+                            <div class="mb-3">
+                                <table class="medication_table">
+                                    <td><input autocomplete="off" class="form-control mx-auto w-auto" min="0"
+                                            step="0.50" name="amount_given" placeholder="Amount given" type="number"
+                                            style="display:inline">
+                                    </td>
+                                    <td><select name="dosage" style="display:inline">
+                                            <option value="ml">ml</option>
+                                            <option value="mg">mg</option>
+                                            <option value="tablet">tablet</option>
+                                        </select>
+                                    </td>
+                                </table>
+                            </div>
+                            <div class="mb-3">
+                                <label for="time_taken"> Date and time:</label>
+                                <input type="datetime-local" name="time_taken">
+                                <input name="patient_id" type="number" value="{{patient[0]['id']}}"
+                                    style="display:none">
+                            </div>
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="symptom_grid">
+        <div class="dashboard_table">
+            <tbody>
+                <table class="table table-striped">
+                    <div class="mb-3">
+                        <h5>Last 5 symptom's recorded.</h5>
+                    </div>
+                    <thead>
+                        <tr>
+                            <th class="text-start">Time taken</th>
+                            <th class="text-end">Symptom</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for symptom in symptoms %}
+                        <tr>
+                            <td class="text-start">{{ symptom.selected_time | datetime_change }}</td>
+                            <td class="text-end">{{ symptom.symptom }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </tbody>
+
+            <form action="/dashboard/symptoms" method="post">
+                <div class="accordion accordion-flush-three" id="accordionFlushThree">
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <button class="accordion-button collapsed d-block w-100 text-center" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false"
+                                aria-controls="flush-collapseThree">
+                                Add symptom.
+                            </button>
+                        </div>
+                        <div id="flush-collapseThree" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionFlush">
+                            <div class="accordion-body">
+                                <label for="symptom">Enter symptom:</label>
+                                <br>
+                                <input type="text" name="symptom" id="symptom" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="time_taken"> When did symptoms start:</label>
+                                <br>
+                                <input type="datetime-local" name="time_taken">
+                                <input name="patient_id" type="number" value="{{patient[0]['id']}}"
+                                    style="display:none">
+                            </div>
+                            <button class="btn btn-primary" type="submit">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

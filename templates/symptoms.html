@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Symptoms
+{% endblock %}
+
+{% block main %}
+<h4>Add new Symptom</h4>
+<form action="/symptoms" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" name="patient">
+            <option disabled selected>Patient</option>
+            {% for patient in patients %}
+
+            <option value="{{patient.name}}">{{ patient.name }}</option>
+
+            {% endfor %}
+
+        </select>
+    </div>
+    <div class="mb-3">
+        <input type="text" name="symptom" placeholder="Enter symptom here" />
+    </div>
+    <div class="mb-3">
+        <h6><label>Date and time:</label></h6>
+        <input type="datetime-local" name="time_taken">
+    </div>
+    <button class="btn btn-primary" type="submit">Update</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-start">Patient</th>
+            <th class="text-end">Added by</th>
+            <th class="text-end">Date / Time</th>
+            <th class="text-end">Symptoms</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for symptom in symptoms %}
+        <tr>
+            <td class="text-start">{{ symptom.name }}</td>
+            <td class="text-end">{{ symptom.username }}</td>
+            <td class="text-end">{{ symptom.selected_time | datetime_change }}</td>
+            <td class="text-end">{{ symptom.symptom }}</td>
+        </tr>
+        {% endfor %}
+</table>
+{% endblock %}

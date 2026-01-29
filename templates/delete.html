@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Delete Patient Data
+{% endblock %}
+
+{% block main %}
+
+
+<form action="/delete" method="post">
+    <div class="mb-3">
+        <h4>Delete Patient Data</h4>
+    </div>
+    <div class="mb-3">
+        <p>If you continue you will be deleteing the patient and all patient data.</p>
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="patient_name"
+            placeholder="Enter patient name" type="text" data-toggle="tooltip" data-placement="left"
+            title="This name field is case sensitive.">
+    </div>
+    <button class="btn btn-primary" id="delete_data" type="submit">DELETE DATA!</button>
+</form>
+{% endblock %}

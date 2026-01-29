@@ -1,0 +1,160 @@
+* {
+  box-sizing: border-box;
+}
+/* Size for brand */
+nav .navbar-brand {
+    font-size: xx-large;
+    font-family: Verdana !important;
+}
+
+/* Colors for brand */
+nav .navbar-brand .blue {
+    color: #537fbe;
+}
+
+nav .navbar-brand .red {
+    color: #ea433b;
+}
+
+nav .navbar-brand .yellow {
+    color: #f5b82e;
+}
+
+nav .navbar-brand .green {
+    color: #2e944b;
+}
+
+#navbar {
+    font-family: Verdana !important;
+    color: #000000;
+}
+
+.go_back{
+    font-size: large;
+    padding: 0px 4px 4px 4px;
+    color: #fff;
+    background-color: #0d6efd;
+    border-radius: 5px;
+    border-color: #0d6efd;
+}
+
+div,
+header,
+footer {
+    color: #000000
+}
+
+canvas {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+}
+
+.dashboard_table {
+    display: block;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0px 0px 5px 0px;
+}
+
+.medication_table {
+    display: flex;
+    justify-content: center;
+}
+
+.dash_button, .add_button {
+    border: 1px solid black;
+    display: inline-block;
+    padding: 0px 4px 0px 4px;
+    color: #fff;
+    background-color: #0d6efd;
+    border-radius: 5px;
+    border-color: #0d6efd;
+    text-align: left;
+}
+
+.accordion-button::after {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 1rem;
+}
+
+.section {
+    list-style-position: inside
+}
+
+.accordion-button.collapsed {
+    color: white;
+    background: #0d6efd;
+}
+
+#delete, #delete_data{
+    color: #ffffff;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    text-decoration:none;
+    background-color: #ff0000;
+}
+
+#logout, #login{
+    color: #fff;
+    background-color: #ff0000;
+    border-radius: 5px;
+
+    display: inline-block;
+   padding: 4px 6px 4px 6px;
+}
+
+#account, #register{
+    color: #fff;
+    background-color: #0d6efd;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 4px 6px 4px 6px;
+}
+
+.account, .register{
+    margin-right: 0.25em;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas:
+    'temp_grid'
+    'graph_grid'
+    'med_grid'
+    'symptom_grid';
+    background-color: white;
+  gap: 10px;
+}
+
+.temp_grid{
+    grid-area: temp_grid;
+}
+
+.graph_grid{
+    grid-area: graph_grid;
+}
+
+.med_grid{
+    grid-area: med_grid;
+}
+
+.symptom_grid{
+    grid-area: symptom_grid;
+}
+
+@media (min-width: 1200px) {
+    .temp_grid {grid-area: 2 / span 3;}
+    .graph_grid {grid-area: 2 / span 3;}
+    .med_grid {grid-area: 3 / span 3;}
+    .symptom_grid {grid-area: 3 / span 3;}
+    .grid-container {grid-auto-columns: 17.5%;}
+    .grid-container {justify-content: center;}
+}
+h2, h3, h4{
+    text-decoration: underline;
+}
+.links{
+    font-weight: bold;
+}

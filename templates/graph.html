@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Graph
+{% endblock %}
+
+{% block main %}
+<form action="/graph" method="post">
+    <div class="mb-3">
+        <h4>Temperature History Data</h4>
+    </div>
+    <div class="mb-3">
+        <div class="mb-3">
+            <p>
+            <h6>Select a patient to see their temperature history</h6>
+            </p>
+            <select class="form-select mx-auto w-auto" name="patient">
+
+                <option disabled selected>Patient</option>
+                {% for patient in patients %}
+
+                <option value="{{patient.name}}">{{ patient.name }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</form>
+
+{% endblock %}

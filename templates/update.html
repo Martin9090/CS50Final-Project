@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Update
+{% endblock %}
+
+{% block main %}
+<form action="/update" method="post">
+    <div class="mb-3">
+        <h4>Update Patient Data</h4>
+    </div>
+    <div class="mb-3">
+        <div class="mb-3">
+            <p>Select a patient to update their information</p>
+            <select class="form-select mx-auto w-auto" name="patient">
+
+                <option disabled selected>Patient</option>
+                {% for patient in patients %}
+
+                <option value="{{patient.name}}">{{ patient.name }}</option>
+
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Select</button>
+    </div>
+</form>
+
+{% endblock %}
