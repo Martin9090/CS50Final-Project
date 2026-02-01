@@ -1,5 +1,6 @@
 import os
 import csv
+import io
 
 from cs50 import SQL
 from flask import (
@@ -122,7 +123,7 @@ def register():
 
         # Hash password
         hashed = generate_password_hash(
-            request.form.get("password"), method="scrypt", salt_length=16
+            request.form.get("password"), method="pbkdf2:sha256", salt_length=16
         )
 
         # Insert username and password into database and check for already used username
@@ -174,7 +175,7 @@ def account():
 
         # Hash new password
         hashed = generate_password_hash(
-            request.form.get("password"), method="scrypt", salt_length=16
+            request.form.get("password"), method="pbkdf2:sha256", salt_length=16
         )
 
         # update user passowrd in databse
@@ -606,36 +607,30 @@ def download():
             {"header": ["time", "symptom"], "data": symptom_data},
             {"header": ["time_given", "medication", "dosage"], "data": medication_data},
         ]
-        # create csv file give it a name and headers to use
-        with open("patient_data.csv", "w", newline="") as csvfile:
+        # create CSV entirely in memory to avoid filesystem locks
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=[])
 
-            writer = csv.DictWriter(csvfile, fieldnames=[])
+        for names in fieldnames:
+            writer.fieldnames = names["header"]
+            writer.writeheader()
 
-            for names in fieldnames:
-                writer.fieldnames = names["header"]
-                writer.writeheader()
+            for row in names["data"]:
+                row_headers = {key: row.get(key, "") for key in writer.fieldnames}
+                writer.writerow(row_headers)
 
-                for row in names["data"]:
-                    row_headers = {key: row.get(key, "") for key in writer.fieldnames}
-                    writer.writerow(row_headers)
-        # check if the file exists
-        if not os.path.exists("patient_data.csv"):
-            return apology("File not found", 404)
-        # try to send file to download in browser
+        csv_text = output.getvalue()
+        output.close()
+
         try:
-            response = send_file(
-                "patient_data.csv",
+            return send_file(
+                io.BytesIO(csv_text.encode("utf-8")),
                 as_attachment=True,
                 download_name="patient_data.csv",
                 mimetype="text/csv",
             )
-            # remove file when sent so not to fill up the server
-            os.remove("patient_data.csv")
-
-            return response
-        # show error if did not work
-        except Exception:
-            return apology("Error occured", 500)
+        except Exception as e:
+            return apology(f"Error occured: {e}", 500)
     else:
         """Select patient to download data"""
         # Get patient date from patient table for user to use in dropdown name selection
@@ -838,32 +833,26 @@ def dashboard_csv():
         {"header": ["time_given", "medication", "dosage"], "data": medication_data},
     ]
     # create csv file and name it and headers to use
-    with open("patient_data.csv", "w", newline="") as csvfile:
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=[])
 
-        writer = csv.DictWriter(csvfile, fieldnames=[])
+    for names in fieldnames:
+        writer.fieldnames = names["header"]
+        writer.writeheader()
 
-        for names in fieldnames:
-            writer.fieldnames = names["header"]
-            writer.writeheader()
+        for row in names["data"]:
+            row_headers = {key: row.get(key, "") for key in writer.fieldnames}
+            writer.writerow(row_headers)
 
-            for row in names["data"]:
-                row_headers = {key: row.get(key, "") for key in writer.fieldnames}
-                writer.writerow(row_headers)
-    # check if the file exists
-    if not os.path.exists("patient_data.csv"):
-        return apology("File not found", 404)
-    # try to send file to download in browser
+    csv_text = output.getvalue()
+    output.close()
+
     try:
-        response = send_file(
-            "patient_data.csv",
+        return send_file(
+            io.BytesIO(csv_text.encode("utf-8")),
             as_attachment=True,
             download_name="patient_data.csv",
             mimetype="text/csv",
         )
-        # remove file when sent so not to fill up the server
-        os.remove("patient_data.csv")
-
-        return response
-    # show error if it did not work.
-    except Exception:
-        return apology("No file error", 500)
+    except Exception as e:
+        return apology(f"Error occured: {e}", 500)

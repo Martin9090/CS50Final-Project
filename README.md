@@ -46,6 +46,46 @@ The app also has a page of useful links, as I live in the UK these links point t
 
 The app also allows a user to download all the patient data for a person. This is downloaded as a CSV file and contains all the data held in the database for the patient. This could then be given to a doctor or health provider and may be useful. The option to download the patient data can also be done from the individual patient dashboards.
 
+## Installation
+
+I have built and run this project on Visual Studio Code.
+
+Install VSCode if needed.
+
+In VSCode command pallet (Ctrl+Shift+p)
+git: clone (install git for windows if needed)
+clone my github project repository:
+https://github.com/Martin9090/CS50Final-Project.git
+
+Open a powershell terminal and run the following commands one at a time, these commands will install Python, allow the apllication to execute, create a virtual enviroment for the application to run in, install dependencies and requirements and run the application:
+
+winget install --id Python.Python.3.11 -e --source winget
+
+python.exe -m pip install --upgrade pip
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+py -3 -m venv .venv
+
+. .\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip setuptools wheel
+
+python -m pip install -r requirements.txt
+
+python -m flask run --host=127.0.0.1 --port=5000
+
+The terminal should show:
+Running on http://127.0.0.1:5000 (or something similar) click on the link in the terminal to open the browser page.
+
+## Tech Stack
+
+- Python 3.11
+- Flask
+- SQLite
+- Bootstrap
+- Werkzeug
+
 ## Files in my project and app.py
 
 #### <ins>project.db</ins>
@@ -188,13 +228,13 @@ I wanted to add a way to download all patient information that had been added to
 
 &nbsp;
 
-When a user is selected 4 SQL queries or made to get the information from each of the 4 tables patient, temp, medication, symptom for the selected patient, it stores these in variables to be picked up by the CSV write function. Originally, I tried to use a single query to pull all the information out of the tables in one query, but I would always end up with thousands of additional lines of being produced in the CSV file unnecessarily.
+When a user is selected 4 SQL queries or made to get the information from each of the 4 tables patient, temp, medication, symptom for the selected patient, it stores these in variables to be picked up by the CSV write function. Originally, I tried to use a single query to pull all the information out of the tables in one query, but I would always end up with thousands of additional lines being produced in the CSV file unnecessarily.
 
 &nbsp;
 
 &nbsp;I have had a lot trouble getting this to work as I wanted it looking through a lot of documentation and stack overflow forums, but in the end, I used ChatGPT to get the function working as I wanted, allowing me to write each variable file into the CSV file with the column headings as the headings on the file and then writing the next file in creating another line of headings from that file and so on.
 
-Once the CSV file has been completed, it uses send_file to pass the CSV to the browser for download and then deletes the file from the app with os.remove so constant download requests won't create unnecessary files that take up space.
+Once the CSV file has been completed, it uses send_file to pass the CSV to the browser for download and then deletes the file from the app so constant download requests won't create unnecessary files that take up space.
 
 #### <ins>delete.html</ins>
 
@@ -285,5 +325,3 @@ Bootstrap
 AI used for logo design website design.com
 
 AI used for assistance with coding ChatGPT.
-
-flask --app app.py --debug run
